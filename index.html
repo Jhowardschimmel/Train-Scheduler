@@ -1,0 +1,139 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Train Scheduler</title>
+
+    <!-- Link to Firebase -->
+    <script src="https://www.gstatic.com/firebasejs/5.5.2/firebase.js"></script>
+    <script>
+        // Initialize Firebase
+        var config = {
+            apiKey: "AIzaSyBxuQsoPvhwMTLNrRRTQ8-QB5Y2kcAVeIA",
+            authDomain: "train-scheduler-87a76.firebaseapp.com",
+            databaseURL: "https://train-scheduler-87a76.firebaseio.com",
+            projectId: "train-scheduler-87a76",
+            storageBucket: "train-scheduler-87a76.appspot.com",
+            messagingSenderId: "272548549219"
+        };
+        firebase.initializeApp(config);
+    </script>
+
+
+</head>
+
+<body>
+
+    <!-- Added Moment JS -->
+    <script src="https://cdn.jsdelivr.net/momentjs/2.12.0/moment.min.js"></script>
+
+
+    </head>
+
+    <body>
+        
+        <div class="container">
+            <form id="inputform">
+                Train Name:<br>
+                <input type="text" id="trainname"><br> Destination
+                <br>
+                <input type="text" id="destination"><br> First Train Time: <b>millitary time</b><br>
+                <input type="text" id="firsttraintime"><br> Frequency: <b>minutes</b><br>
+                <input type="text" form="inputform" id="frequency"><br><br>
+            </form>
+
+            <button id="addtrain" type="submit" value="Submit">Submit</button>
+        </div>
+        <div id="displaydiv">
+            <table id="newtraintable">
+                <thead>
+                    <tr>
+                        <th>Train Name</th>
+                        <th>Destination</th>
+                        <th>Frequency</th>
+                        <th>Next Arrival</th>
+                        <th>Minutes Away</th>
+                    </tr>
+                </thead>
+                <tbody></tbody>
+            </table>
+            <div id="trainnamediv"></div>
+            <div id="destinationdiv"></div>
+            <div id="firsttraintimediv"></div>
+            <div id="frequencydiv"></div>
+        </div>
+        <!-- jQuery -->
+        <script src="https://code.jquery.com/jquery.js"></script>
+
+
+        <!-- Script -->
+        
+        <script>
+            $(document).ready();
+            // Create a variable to reference the database
+            let database = firebase.database();
+
+            //initial values
+            let trainName = "";
+            let destination = "";
+            let firstTrainTime = "";
+            let millitaryFormat = "HH/mm/ss";
+            let frequency = "m";
+
+            //On click event listener
+            $("#addtrain").on("click", function (event) {
+                event.preventDefault();
+
+                //Store and retrieve data
+                trainName = $("#trainname").val().trim();
+                destination = $("#destination").val().trim();
+                firstTrainTime = $("#firsttraintime").val().trim();
+                frequency = $("#frequency").val().trim();
+
+                //create object
+                let newTrain = {
+                    name: trainName,
+                    destination: destination,
+                    time: firstTrainTime,
+                    frequency: frequency
+                };
+
+                newRow = ("");
+                // Append the new row to the table
+                $("#newtraintable > tbody").append(newRow);
+
+                database.ref().push(newTrain);
+
+                //change HTML to reflect
+                $("#displaydiv").text(newTrain);
+
+                //reset form field
+                // Handle the errors
+
+                $("#inputform")[0].reset();
+            
+
+            });
+            
+
+
+
+
+
+
+
+                // Change the HTML to reflect
+
+                //$("#trainnamediv").text(snapshot.val().trainName);
+                //$("#destinationdiv").text(snapshot.val().destination);
+                //$("#firsttraintimediv").text(snapshot.val().firstTrainTime);
+                //$("#frequencydiv").text(snapshot.val().frequency);
+
+                
+        </script>
+    </body>
+
+</html>
